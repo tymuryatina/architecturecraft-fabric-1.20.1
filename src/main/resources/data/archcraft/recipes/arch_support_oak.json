@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    " M "
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:oak_planks"
+    }
+  },
+  "result": {
+    "item": "archcraft:arch_support_oak",
+    "count": 2
+  }
+}

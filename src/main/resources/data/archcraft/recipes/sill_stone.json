@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    " M "
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "item": "archcraft:sill_stone",
+    "count": 2
+  }
+}

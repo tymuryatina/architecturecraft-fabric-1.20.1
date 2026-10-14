@@ -59,6 +59,29 @@ public class ArchitectureCraftFabric implements ModInitializer {
         register("trim_stone", new ShapeBlock(stone(), Block.createCuboidShape(0,0,0,16,3,16)));
         register("post_oak", new ShapeBlock(wood(), Block.createCuboidShape(5,0,5,11,16,11)));
         register("post_stone", new ShapeBlock(stone(), Block.createCuboidShape(5,0,5,11,16,11)));
+
+        // Additional architectural profiles. These use real voxel geometry for collision and selection.
+        register("arch_support_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,5,16,16), Block.createCuboidShape(11,0,0,16,16,16), Block.createCuboidShape(5,11,0,11,16,16))));
+        register("bracket_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,4,16), Block.createCuboidShape(0,4,0,6,12,16))));
+        register("bracket_stone", new ShapeBlock(stone(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,4,16), Block.createCuboidShape(0,4,0,6,12,16))));
+        register("cornice_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,5,16), Block.createCuboidShape(0,5,0,16,9,12), Block.createCuboidShape(0,9,0,16,12,8))));
+        register("cornice_stone", new ShapeBlock(stone(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,5,16), Block.createCuboidShape(0,5,0,16,9,12), Block.createCuboidShape(0,9,0,16,12,8))));
+        register("sill_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,3,16), Block.createCuboidShape(0,3,0,16,6,12))));
+        register("sill_stone", new ShapeBlock(stone(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,3,16), Block.createCuboidShape(0,3,0,16,6,12))));
+        register("baluster_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(5,0,5,11,3,11), Block.createCuboidShape(6,3,6,10,12,10), Block.createCuboidShape(4,12,4,12,15,12), Block.createCuboidShape(5,15,5,11,16,11))));
+        register("lattice_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,3,16,16), Block.createCuboidShape(13,0,0,16,16,16), Block.createCuboidShape(3,0,0,13,3,16), Block.createCuboidShape(3,13,0,13,16,16), Block.createCuboidShape(7,3,0,9,13,16))));
+        register("panel_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,16,2), Block.createCuboidShape(2,2,2,14,14,4))));
+        register("roof_tile_oak", new ShapeBlock(wood(), Block.createCuboidShape(0,0,0,16,3,16)));
+        register("roof_ridge_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,16,8,12), Block.createCuboidShape(0,8,6,16,12,10))));
+        register("column_stone", new ShapeBlock(stone(), VoxelShapes.union(Block.createCuboidShape(4,0,4,12,16,12), Block.createCuboidShape(3,0,3,13,2,13), Block.createCuboidShape(3,14,3,13,16,13))));
+        register("column_capital_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(5,0,5,11,10,11), Block.createCuboidShape(2,10,2,14,13,14), Block.createCuboidShape(0,13,0,16,16,16))));
+        register("column_base_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(5,5,5,11,16,11), Block.createCuboidShape(2,2,2,14,5,14), Block.createCuboidShape(0,0,0,16,2,16))));
+        register("beam_spruce", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("beam_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("beam_dark_oak", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("post_spruce", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
+        register("post_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
+
     }
 
     public static class ShapeBlock extends Block {
