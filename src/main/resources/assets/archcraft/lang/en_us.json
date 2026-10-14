@@ -97,5 +97,21 @@
   "block.archcraft.arch_d3c_stone": "ARCH D3C stone",
   "block.archcraft.arch_d4a_stone": "ARCH D4A stone",
   "block.archcraft.arch_d4b_stone": "ARCH D4B stone",
-  "block.archcraft.arch_d4c_stone": "ARCH D4C stone"
+  "block.archcraft.arch_d4c_stone": "ARCH D4C stone",
+  "block.archcraft.pillar_birch": "Pillar Birch",
+  "block.archcraft.pillar_dark_oak": "Pillar Dark Oak",
+  "block.archcraft.pillar_acacia": "Pillar Acacia",
+  "block.archcraft.post_jungle": "Post Jungle",
+  "block.archcraft.slab_jungle": "Slab Jungle",
+  "block.archcraft.pillar_jungle": "Pillar Jungle",
+  "block.archcraft.slab_mangrove": "Slab Mangrove",
+  "block.archcraft.pillar_mangrove": "Pillar Mangrove",
+  "block.archcraft.slab_cherry": "Slab Cherry",
+  "block.archcraft.pillar_cherry": "Pillar Cherry",
+  "block.archcraft.post_crimson": "Post Crimson",
+  "block.archcraft.slab_crimson": "Slab Crimson",
+  "block.archcraft.pillar_crimson": "Pillar Crimson",
+  "block.archcraft.post_warped": "Post Warped",
+  "block.archcraft.slab_warped": "Slab Warped",
+  "block.archcraft.pillar_warped": "Pillar Warped"
 }
