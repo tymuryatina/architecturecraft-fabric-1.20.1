@@ -1,6 +1,7 @@
 package dev.archcraft;
 
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.BlockItem;
@@ -51,6 +52,16 @@ public class ArchitectureCraftFabric implements ModInitializer {
     private static AbstractBlock.Settings stone() { return AbstractBlock.Settings.copy(Blocks.STONE); }
 
     @Override public void onInitialize() {
+        ServerPlayNetworking.registerGlobalReceiver(new Identifier(MOD_ID, "sawbench_mode"), (server, player, handler, buf, responseSender) -> {
+            BlockPos pos = buf.readBlockPos();
+            int mode = buf.readVarInt();
+            server.execute(() -> {
+                if (mode >= 0 && mode <= 3 && player.squaredDistanceTo(pos.getX()+0.5, pos.getY()+0.5, pos.getZ()+0.5) <= 64.0) {
+                    BlockState current = player.getWorld().getBlockState(pos);
+                    if (current.getBlock() instanceof SawbenchBlock) player.getWorld().setBlockState(pos, current.with(SawbenchBlock.MODE, mode));
+                }
+            });
+        });
         register("arch_d1", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,4,12,12), Block.createCuboidShape(12,0,4,16,12,12), Block.createCuboidShape(4,8,4,12,16,12))));
         register("arch_d2", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,4,10,12), Block.createCuboidShape(12,0,4,16,10,12), Block.createCuboidShape(4,8,4,12,12,12), Block.createCuboidShape(2,10,4,6,14,12), Block.createCuboidShape(10,10,4,14,14,12), Block.createCuboidShape(4,12,4,12,16,12))));
         register("arch_d3a", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,3,12,12), Block.createCuboidShape(13,0,4,16,12,12), Block.createCuboidShape(3,8,4,6,14,12), Block.createCuboidShape(10,8,4,13,14,12), Block.createCuboidShape(6,12,4,10,16,12))));
@@ -195,6 +206,7 @@ public class ArchitectureCraftFabric implements ModInitializer {
         @Override
         public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
             ItemStack held = player.getStackInHand(hand);
+            if (player.isSneaking()) return ActionResult.SUCCESS;
             if (held.isEmpty()) {
                 if (!world.isClient) {
                     int nextMode = (state.get(MODE) + 1) % 4;
