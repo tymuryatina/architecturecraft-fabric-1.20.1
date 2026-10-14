@@ -37,8 +37,10 @@ for block in sorted(blocks):
         ASSETS / f"models/block/{block}.json",
         ASSETS / f"models/item/{block}.json",
         DATA / f"loot_tables/blocks/{block}.json",
-        DATA / f"recipes/{block}.json",
     ]
+    # Generic material-backed shapes are sawbench outputs, not fixed-input recipes.
+    if not block.endswith("_custom"):
+        required.append(DATA / f"recipes/{block}.json")
     for path in required:
         if not path.is_file():
             errors.append(f"Missing resource for {block}: {path.relative_to(ROOT)}")
