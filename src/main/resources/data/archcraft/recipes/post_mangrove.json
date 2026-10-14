@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    " M "
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:mangrove_planks"
+    }
+  },
+  "result": {
+    "item": "archcraft:post_mangrove",
+    "count": 2
+  }
+}

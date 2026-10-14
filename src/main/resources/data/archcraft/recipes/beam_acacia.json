@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    " M "
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:acacia_planks"
+    }
+  },
+  "result": {
+    "item": "archcraft:beam_acacia",
+    "count": 2
+  }
+}

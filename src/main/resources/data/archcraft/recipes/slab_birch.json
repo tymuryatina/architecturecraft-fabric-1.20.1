@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    " M "
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:birch_planks"
+    }
+  },
+  "result": {
+    "item": "archcraft:slab_birch",
+    "count": 2
+  }
+}

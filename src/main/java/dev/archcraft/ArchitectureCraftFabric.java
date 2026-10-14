@@ -33,7 +33,7 @@ public class ArchitectureCraftFabric implements ModInitializer {
         Identifier id = new Identifier(MOD_ID, name);
         Block registered = Registry.register(Registries.BLOCK, id, block);
         Registry.register(Registries.ITEM, id, new BlockItem(registered, new Item.Settings()));
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> entries.add(registered));
+        ItemGroupEvents.modifyEntriesEvent(name.equals("sawbench") ? ItemGroups.FUNCTIONAL : ItemGroups.BUILDING_BLOCKS).register(entries -> entries.add(registered));
         return registered;
     }
     private static AbstractBlock.Settings wood() { return AbstractBlock.Settings.copy(Blocks.OAK_PLANKS); }
@@ -81,6 +81,22 @@ public class ArchitectureCraftFabric implements ModInitializer {
         register("beam_dark_oak", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
         register("post_spruce", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
         register("post_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
+
+        register("beam_acacia", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("beam_jungle", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.JUNGLE_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("beam_mangrove", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.MANGROVE_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("beam_cherry", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.CHERRY_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("beam_crimson", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.CRIMSON_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("beam_warped", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("post_acacia", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
+        register("post_dark_oak", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
+        register("post_mangrove", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.MANGROVE_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
+        register("post_cherry", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.CHERRY_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
+        register("slab_spruce", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
+        register("slab_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
+        register("slab_dark_oak", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
+        register("slab_acacia", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
+
 
     }
 
