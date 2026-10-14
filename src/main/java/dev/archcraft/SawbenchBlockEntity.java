@@ -36,12 +36,12 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
 
     public int getSelectedMode() { return selectedMode; }
     public void setSelectedMode(int mode) {
-        if (mode < 0 || mode > 3) return;
+        if (mode < 0 || mode >= ArchitectureCraftFabric.getSawbenchShapeCount()) return;
         selectedMode = mode;
         if (world != null && !world.isClient) {
             BlockState state = world.getBlockState(pos);
             if (state.getBlock() == ArchitectureCraftFabric.SAWBENCH_BLOCK)
-                world.setBlockState(pos, state.with(ArchitectureCraftFabric.SawbenchBlock.MODE, mode), 3);
+                world.setBlockState(pos, state.with(ArchitectureCraftFabric.SawbenchBlock.MODE, mode % 4), 3);
         }
         // Changing the selected shape must not consume input or produce items.
         // Crafting happens when input is inserted or output space becomes available.
@@ -104,16 +104,8 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
 
     private Identifier getOutputId(String material) {
         if (material == null) return null;
-        String prefix = switch (selectedMode) {
-            case 1 -> "post_";
-            case 2 -> "slab_";
-            case 3 -> "pillar_";
-            default -> "beam_";
-        };
-        Identifier id = new Identifier(ArchitectureCraftFabric.MOD_ID, prefix + material);
-        if (Registries.ITEM.containsId(id)) return id;
-        Identifier genericId = new Identifier(ArchitectureCraftFabric.MOD_ID, prefix + "custom");
-        return Registries.ITEM.containsId(genericId) ? genericId : null;
+        Identifier id = ArchitectureCraftFabric.getSawbenchShapeId(selectedMode);
+        return id != null && Registries.ITEM.containsId(id) ? id : null;
     }
 
     @Override public boolean isValid(int slot, ItemStack stack) {
@@ -154,7 +146,7 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
         super.readNbt(nbt);
         Inventories.readNbt(nbt, inventory);
         selectedMode = nbt.contains("SelectedMode") ? nbt.getInt("SelectedMode") : 0;
-        if (selectedMode < 0 || selectedMode > 3) selectedMode = 0;
+        if (selectedMode < 0 || selectedMode >= ArchitectureCraftFabric.getSawbenchShapeCount()) selectedMode = 0;
     }
     @Override public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
