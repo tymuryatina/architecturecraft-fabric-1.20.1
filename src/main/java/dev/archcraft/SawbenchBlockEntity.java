@@ -77,7 +77,12 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
         markDirty();
         if (slot == 0 && !crafting) craft();
     }
-    @Override public void clear() { inventory.clear(); markDirty(); }
+    @Override public void clear() {
+        // Keep the inventory at its declared two-slot size; clearing the backing list
+        // would remove slots and break subsequent menu/hopper access.
+        for (int slot = 0; slot < inventory.size(); slot++) inventory.set(slot, ItemStack.EMPTY);
+        markDirty();
+    }
     @Override public boolean canPlayerUse(PlayerEntity player) {
         return world != null && world.getBlockEntity(pos) == this &&
             player.squaredDistanceTo(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64.0;
