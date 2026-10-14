@@ -9,6 +9,9 @@ import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import net.minecraft.block.AbstractBlock;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -114,16 +117,36 @@ public class ArchitectureCraftFabric implements ModInitializer {
      * The full upstream selection GUI and arbitrary-shape cutting are still TODO.
      */
     public static class SawbenchBlock extends Block {
-        public SawbenchBlock(AbstractBlock.Settings settings) { super(settings); }
+        public static final IntProperty MODE = IntProperty.of("mode", 0, 3);
+
+        public SawbenchBlock(AbstractBlock.Settings settings) {
+            super(settings);
+            setDefaultState(getDefaultState().with(MODE, 0));
+        }
+
+        @Override
+        protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+            builder.add(MODE);
+        }
+
+        @Override
+        public BlockState getPlacementState(ItemPlacementContext ctx) {
+            return getDefaultState().with(MODE, 0);
+        }
 
         @Override
         public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
             ItemStack held = player.getStackInHand(hand);
-            if (world.isClient) return ActionResult.SUCCESS;
             if (held.isEmpty()) {
-                player.sendMessage(Text.literal("ArchitectureCraft sawbench: hold planks or stone to cut a beam; crouch to cut a post."), true);
-                return ActionResult.CONSUME;
+                if (!world.isClient) {
+                    int nextMode = (state.get(MODE) + 1) % 4;
+                    world.setBlockState(pos, state.with(MODE, nextMode));
+                    String[] labels = {"Beam", "Post", "Slab", "Pillar"};
+                    player.sendMessage(Text.literal("Sawbench mode: " + labels[nextMode] + ". Use planks or stone to cut."), true);
+                }
+                return ActionResult.SUCCESS;
             }
+            if (world.isClient) return ActionResult.SUCCESS;
 
             String inputPath = Registries.ITEM.getId(held.getItem()).getPath();
             String material;
@@ -136,15 +159,22 @@ public class ArchitectureCraftFabric implements ModInitializer {
                 return ActionResult.CONSUME;
             }
 
-            String outputName = player.isSneaking() ? "post_" + material : "beam_" + material;
+            String prefix = switch (state.get(MODE)) {
+                case 1 -> "post_";
+                case 2 -> "slab_";
+                case 3 -> "pillar_";
+                default -> "beam_";
+            };
+            String outputName = prefix + material;
             Identifier outputId = new Identifier(MOD_ID, outputName);
             if (!Registries.ITEM.containsId(outputId)) {
                 outputName = "beam_" + material;
                 outputId = new Identifier(MOD_ID, outputName);
-            }
-            if (!Registries.ITEM.containsId(outputId)) {
-                player.sendMessage(Text.literal("This material has no matching shape yet."), true);
-                return ActionResult.CONSUME;
+                if (!Registries.ITEM.containsId(outputId)) {
+                    player.sendMessage(Text.literal("No matching shape exists for this material yet."), true);
+                    return ActionResult.CONSUME;
+                }
+                player.sendMessage(Text.literal("That profile is not available for this material; cut a beam instead."), true);
             }
 
             if (!player.getAbilities().creativeMode) held.decrement(1);

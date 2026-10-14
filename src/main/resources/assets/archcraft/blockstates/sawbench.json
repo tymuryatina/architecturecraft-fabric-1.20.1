@@ -1,6 +1,15 @@
 {
   "variants": {
-    "": {
+    "mode=0": {
+      "model": "archcraft:block/sawbench"
+    },
+    "mode=1": {
+      "model": "archcraft:block/sawbench"
+    },
+    "mode=2": {
+      "model": "archcraft:block/sawbench"
+    },
+    "mode=3": {
       "model": "archcraft:block/sawbench"
     }
   }
