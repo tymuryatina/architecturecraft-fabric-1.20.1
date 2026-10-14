@@ -12,7 +12,7 @@ ASSETS = RES / "assets/archcraft"
 DATA = RES / "data/archcraft"
 
 source = JAVA.read_text(encoding="utf-8")
-blocks = set(re.findall(r'register\\("([^"]+)"\\s*,', source))
+blocks = set(re.findall(r'register\("([^"]+)"\s*,', source))
 errors = []
 
 if not blocks:
