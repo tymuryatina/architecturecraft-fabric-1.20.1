@@ -33,6 +33,9 @@ import net.minecraft.world.World;
 import net.minecraft.util.math.Direction;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.block.BlockWithEntity;
+import net.minecraft.screen.ScreenHandlerType;
+import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.item.ItemGroup;
@@ -41,6 +44,9 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 
 public class ArchitectureCraftFabric implements ModInitializer {
     public static final String MOD_ID = "archcraft";
+    public static Block SAWBENCH_BLOCK;
+    public static BlockEntityType<SawbenchBlockEntity> SAWBENCH_BLOCK_ENTITY;
+    public static ScreenHandlerType<SawbenchScreenHandler> SAWBENCH_SCREEN_HANDLER;
     private static Block register(String name, Block block) {
         Identifier id = new Identifier(MOD_ID, name);
         Block registered = Registry.register(Registries.BLOCK, id, block);
@@ -102,7 +108,9 @@ public class ArchitectureCraftFabric implements ModInitializer {
         register("arch_d4a_stone", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.STONE), VoxelShapes.union(Block.createCuboidShape(0,0,4,3,12,12), Block.createCuboidShape(13,0,4,16,12,12), Block.createCuboidShape(3,8,4,5,12,12), Block.createCuboidShape(11,8,4,13,12,12), Block.createCuboidShape(5,10,4,7,14,12), Block.createCuboidShape(9,10,4,11,14,12), Block.createCuboidShape(7,14,4,9,16,12))));
         register("arch_d4b_stone", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.STONE), VoxelShapes.union(Block.createCuboidShape(0,0,4,3,10,12), Block.createCuboidShape(13,0,4,16,10,12), Block.createCuboidShape(3,8,4,5,12,12), Block.createCuboidShape(11,8,4,13,12,12), Block.createCuboidShape(5,10,4,7,14,12), Block.createCuboidShape(9,10,4,11,14,12), Block.createCuboidShape(7,12,4,9,16,12))));
         register("arch_d4c_stone", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.STONE), VoxelShapes.union(Block.createCuboidShape(0,0,4,4,12,12), Block.createCuboidShape(12,0,4,16,12,12), Block.createCuboidShape(4,8,4,6,12,12), Block.createCuboidShape(10,8,4,12,12,12), Block.createCuboidShape(6,10,4,8,14,12), Block.createCuboidShape(8,10,4,10,14,12), Block.createCuboidShape(6,14,4,10,16,12))));
-        register("sawbench", new SawbenchBlock(wood()));
+        SAWBENCH_BLOCK = register("sawbench", new SawbenchBlock(wood()));
+        SAWBENCH_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "sawbench"), BlockEntityType.Builder.create(SawbenchBlockEntity::new, SAWBENCH_BLOCK).build(null));
+        SAWBENCH_SCREEN_HANDLER = Registry.register(Registries.SCREEN_HANDLER, new Identifier(MOD_ID, "sawbench"), new ScreenHandlerType<>(SawbenchScreenHandler::new, FeatureSet.empty()));
         register("railing_oak", new ShapeBlock(wood(), VoxelShapes.union(
             Block.createCuboidShape(0,0,0,16,3,16), Block.createCuboidShape(0,13,0,16,16,16),
             Block.createCuboidShape(2,3,2,5,13,5), Block.createCuboidShape(11,3,11,14,13,14))));
@@ -180,78 +188,23 @@ public class ArchitectureCraftFabric implements ModInitializer {
     }
 
 
-    /**
-     * First usable sawbench implementation. It turns a stack of planks (or stone)
-     * into a matching beam; crouching makes a post where that material exists.
-     * The full upstream selection GUI and arbitrary-shape cutting are still TODO.
-     */
-    public static class SawbenchBlock extends Block {
-        public static final IntProperty MODE = IntProperty.of("mode", 0, 3);
-
+    /** Separate workbench block with a server-backed inventory screen. */
+    public static class SawbenchBlock extends BlockWithEntity {
         public SawbenchBlock(AbstractBlock.Settings settings) {
             super(settings);
             setDefaultState(getDefaultState().with(MODE, 0));
         }
-
-        @Override
-        protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-            builder.add(MODE);
-        }
-
-        @Override
-        public BlockState getPlacementState(ItemPlacementContext ctx) {
-            return getDefaultState().with(MODE, 0);
-        }
-
-        @Override
-        public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-            ItemStack held = player.getStackInHand(hand);
-            if (player.isSneaking()) return ActionResult.SUCCESS;
-            if (held.isEmpty()) {
-                if (!world.isClient) {
-                    int nextMode = (state.get(MODE) + 1) % 4;
-                    world.setBlockState(pos, state.with(MODE, nextMode));
-                    String[] labels = {"Beam", "Post", "Slab", "Pillar"};
-                    player.sendMessage(Text.literal("Sawbench mode: " + labels[nextMode] + ". Use planks or stone to cut."), true);
-                }
-                return ActionResult.SUCCESS;
+        public static final IntProperty MODE = IntProperty.of("mode", 0, 3);
+        @Override protected void appendProperties(StateManager.Builder<Block, BlockState> builder) { builder.add(MODE); }
+        @Override public BlockState getPlacementState(ItemPlacementContext ctx) { return getDefaultState().with(MODE, 0); }
+        @Override public BlockEntity createBlockEntity(BlockPos pos, BlockState state) { return new SawbenchBlockEntity(pos, state); }
+        @Override public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.MODEL; }
+        @Override public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+            if (!world.isClient) {
+                BlockEntity entity = world.getBlockEntity(pos);
+                if (entity instanceof SawbenchBlockEntity bench) player.openHandledScreen(bench);
             }
-            if (world.isClient) return ActionResult.SUCCESS;
-
-            String inputPath = Registries.ITEM.getId(held.getItem()).getPath();
-            String material;
-            if (inputPath.equals("stone")) {
-                material = "stone";
-            } else if (inputPath.endsWith("_planks")) {
-                material = inputPath.substring(0, inputPath.length() - "_planks".length());
-            } else {
-                player.sendMessage(Text.literal("Use planks or stone on the sawbench."), true);
-                return ActionResult.CONSUME;
-            }
-
-            String prefix = switch (state.get(MODE)) {
-                case 1 -> "post_";
-                case 2 -> "slab_";
-                case 3 -> "pillar_";
-                default -> "beam_";
-            };
-            String outputName = prefix + material;
-            Identifier outputId = new Identifier(MOD_ID, outputName);
-            if (!Registries.ITEM.containsId(outputId)) {
-                outputName = "beam_" + material;
-                outputId = new Identifier(MOD_ID, outputName);
-                if (!Registries.ITEM.containsId(outputId)) {
-                    player.sendMessage(Text.literal("No matching shape exists for this material yet."), true);
-                    return ActionResult.CONSUME;
-                }
-                player.sendMessage(Text.literal("That profile is not available for this material; cut a beam instead."), true);
-            }
-
-            if (!player.getAbilities().creativeMode) held.decrement(1);
-            ItemStack result = new ItemStack(Registries.ITEM.get(outputId), 4);
-            if (!player.getInventory().insertStack(result)) player.dropItem(result, false);
-            player.sendMessage(Text.literal("Cut 4 " + outputName.replace('_', ' ') + "."), true);
-            return ActionResult.CONSUME;
+            return ActionResult.SUCCESS;
         }
     }
 
