@@ -25,7 +25,6 @@ public final class MaterialShapeBlockEntity extends BlockEntity {
         markDirty();
         if (world != null) {
             world.updateListeners(pos, getCachedState(), getCachedState(), 3);
-            if (!world.isClient) world.getChunkManager().markForUpdate(pos);
         }
     }
 
