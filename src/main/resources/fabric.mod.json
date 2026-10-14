@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "archcraft",
+  "version": "${version}",
+  "name": "ArchitectureCraft Fabric",
+  "description": "Architectural shape blocks for Minecraft 1.20.1 Fabric. Early community port.",
+  "authors": ["ArchitectureCraft Fabric port"],
+  "license": "MIT",
+  "environment": "*",
+  "entrypoints": { "main": ["dev.archcraft.ArchitectureCraftFabric"] },
+  "depends": { "fabricloader": ">=0.14.0", "minecraft": "~1.20.1", "java": ">=17", "fabric-api": "*" }
+}
