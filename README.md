@@ -5,7 +5,7 @@ A community Fabric port prototype targeting Minecraft 1.20.1 and Java 17.
 ## Current implementation
 
 - 50 registered architectural block variants, including beams, posts, columns, capitals, bases, cornices, brackets, sills, railings, window frames, lattice and panels.
-- Custom block models and voxel selection/collision shapes for the implemented profiles.
+- Custom block models and voxel selection/collision shapes for the implemented profiles. Beams now place along the clicked face axis (X/Y/Z), with matching models and collision.
 - Basic crafting recipes, item models, English names and block loot tables.\n- A basic sawbench interaction with four selectable profiles (beam, post, slab, pillar): click it with an empty hand to cycle mode, then use planks or stone to cut a matching shape where available.
 - GitHub Actions build workflow that compiles the project and uploads the JAR artifact.
 

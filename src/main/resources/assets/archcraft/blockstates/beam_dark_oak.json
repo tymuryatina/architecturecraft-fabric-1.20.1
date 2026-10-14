@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
-      "model": "archcraft:block/beam_dark_oak"
+    "axis=x": {
+      "model": "archcraft:block/beam_dark_oak_x"
+    },
+    "axis=y": {
+      "model": "archcraft:block/beam_dark_oak_y"
+    },
+    "axis=z": {
+      "model": "archcraft:block/beam_dark_oak_z"
     }
   }
 }

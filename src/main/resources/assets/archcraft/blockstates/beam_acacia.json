@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
-      "model": "archcraft:block/beam_acacia"
+    "axis=x": {
+      "model": "archcraft:block/beam_acacia_x"
+    },
+    "axis=y": {
+      "model": "archcraft:block/beam_acacia_y"
+    },
+    "axis=z": {
+      "model": "archcraft:block/beam_acacia_z"
     }
   }
 }

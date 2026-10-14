@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
-      "model": "archcraft:block/beam_birch"
+    "axis=x": {
+      "model": "archcraft:block/beam_birch_x"
+    },
+    "axis=y": {
+      "model": "archcraft:block/beam_birch_y"
+    },
+    "axis=z": {
+      "model": "archcraft:block/beam_birch_z"
     }
   }
 }

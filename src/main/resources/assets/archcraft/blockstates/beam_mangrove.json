@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
-      "model": "archcraft:block/beam_mangrove"
+    "axis=x": {
+      "model": "archcraft:block/beam_mangrove_x"
+    },
+    "axis=y": {
+      "model": "archcraft:block/beam_mangrove_y"
+    },
+    "axis=z": {
+      "model": "archcraft:block/beam_mangrove_z"
     }
   }
 }

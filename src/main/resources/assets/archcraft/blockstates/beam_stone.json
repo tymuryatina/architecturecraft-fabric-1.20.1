@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
-      "model": "archcraft:block/beam_stone"
+    "axis=x": {
+      "model": "archcraft:block/beam_stone_x"
+    },
+    "axis=y": {
+      "model": "archcraft:block/beam_stone_y"
+    },
+    "axis=z": {
+      "model": "archcraft:block/beam_stone_z"
     }
   }
 }

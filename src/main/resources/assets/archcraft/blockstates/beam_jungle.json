@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
-      "model": "archcraft:block/beam_jungle"
+    "axis=x": {
+      "model": "archcraft:block/beam_jungle_x"
+    },
+    "axis=y": {
+      "model": "archcraft:block/beam_jungle_y"
+    },
+    "axis=z": {
+      "model": "archcraft:block/beam_jungle_z"
     }
   }
 }

@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
-      "model": "archcraft:block/beam_crimson"
+    "axis=x": {
+      "model": "archcraft:block/beam_crimson_x"
+    },
+    "axis=y": {
+      "model": "archcraft:block/beam_crimson_y"
+    },
+    "axis=z": {
+      "model": "archcraft:block/beam_crimson_z"
     }
   }
 }

@@ -1,7 +1,13 @@
 {
   "variants": {
-    "": {
-      "model": "archcraft:block/beam_warped"
+    "axis=x": {
+      "model": "archcraft:block/beam_warped_x"
+    },
+    "axis=y": {
+      "model": "archcraft:block/beam_warped_y"
+    },
+    "axis=z": {
+      "model": "archcraft:block/beam_warped_z"
     }
   }
 }

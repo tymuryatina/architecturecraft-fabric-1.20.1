@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
+import net.minecraft.state.property.EnumProperty;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
@@ -57,8 +58,8 @@ public class ArchitectureCraftFabric implements ModInitializer {
         register("pillar_stone", new ShapeBlock(stone(), Block.createCuboidShape(3,0,3,13,16,13)));
         register("pillar_capital_stone", new ShapeBlock(stone(), VoxelShapes.union(Block.createCuboidShape(3,0,3,13,12,13),Block.createCuboidShape(1,12,1,15,16,15))));
         register("pillar_base_stone", new ShapeBlock(stone(), VoxelShapes.union(Block.createCuboidShape(3,4,3,13,16,13),Block.createCuboidShape(1,0,1,15,4,15))));
-        register("beam_oak", new ShapeBlock(wood(), Block.createCuboidShape(0,4,4,16,12,12)));
-        register("beam_stone", new ShapeBlock(stone(), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("beam_oak", new AxisShapeBlock(wood()));
+        register("beam_stone", new AxisShapeBlock(stone()));
         register("slab_oak", new ShapeBlock(wood(), Block.createCuboidShape(0,0,0,16,8,16)));
         register("slab_stone", new ShapeBlock(stone(), Block.createCuboidShape(0,0,0,16,8,16)));
         register("corner_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,8,8),Block.createCuboidShape(0,0,8,8,16,16))));
@@ -86,18 +87,18 @@ public class ArchitectureCraftFabric implements ModInitializer {
         register("column_stone", new ShapeBlock(stone(), VoxelShapes.union(Block.createCuboidShape(4,0,4,12,16,12), Block.createCuboidShape(3,0,3,13,2,13), Block.createCuboidShape(3,14,3,13,16,13))));
         register("column_capital_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(5,0,5,11,10,11), Block.createCuboidShape(2,10,2,14,13,14), Block.createCuboidShape(0,13,0,16,16,16))));
         register("column_base_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(5,5,5,11,16,11), Block.createCuboidShape(2,2,2,14,5,14), Block.createCuboidShape(0,0,0,16,2,16))));
-        register("beam_spruce", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
-        register("beam_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
-        register("beam_dark_oak", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("beam_spruce", new AxisShapeBlock(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS)));
+        register("beam_birch", new AxisShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS)));
+        register("beam_dark_oak", new AxisShapeBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS)));
         register("post_spruce", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
         register("post_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
 
-        register("beam_acacia", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
-        register("beam_jungle", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.JUNGLE_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
-        register("beam_mangrove", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.MANGROVE_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
-        register("beam_cherry", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.CHERRY_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
-        register("beam_crimson", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.CRIMSON_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
-        register("beam_warped", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS), Block.createCuboidShape(0,4,4,16,12,12)));
+        register("beam_acacia", new AxisShapeBlock(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS)));
+        register("beam_jungle", new AxisShapeBlock(AbstractBlock.Settings.copy(Blocks.JUNGLE_PLANKS)));
+        register("beam_mangrove", new AxisShapeBlock(AbstractBlock.Settings.copy(Blocks.MANGROVE_PLANKS)));
+        register("beam_cherry", new AxisShapeBlock(AbstractBlock.Settings.copy(Blocks.CHERRY_PLANKS)));
+        register("beam_crimson", new AxisShapeBlock(AbstractBlock.Settings.copy(Blocks.CRIMSON_PLANKS)));
+        register("beam_warped", new AxisShapeBlock(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS)));
         register("post_acacia", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
         register("post_dark_oak", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
         register("post_mangrove", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.MANGROVE_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
@@ -182,6 +183,44 @@ public class ArchitectureCraftFabric implements ModInitializer {
             if (!player.getInventory().insertStack(result)) player.dropItem(result, false);
             player.sendMessage(Text.literal("Cut 4 " + outputName.replace('_', ' ') + "."), true);
             return ActionResult.CONSUME;
+        }
+    }
+
+    /** Axis-aware beam with matching placement, collision and selection geometry. */
+    public static class AxisShapeBlock extends Block {
+        public static final EnumProperty<Direction.Axis> AXIS = EnumProperty.of("axis", Direction.Axis.class);
+
+        public AxisShapeBlock(AbstractBlock.Settings settings) {
+            super(settings);
+            setDefaultState(getDefaultState().with(AXIS, Direction.Axis.Y));
+        }
+
+        @Override
+        protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+            builder.add(AXIS);
+        }
+
+        @Override
+        public BlockState getPlacementState(ItemPlacementContext ctx) {
+            return getDefaultState().with(AXIS, ctx.getSide().getAxis());
+        }
+
+        private VoxelShape shapeFor(BlockState state) {
+            return switch (state.get(AXIS)) {
+                case X -> Block.createCuboidShape(0, 4, 4, 16, 12, 12);
+                case Y -> Block.createCuboidShape(4, 0, 4, 12, 16, 12);
+                case Z -> Block.createCuboidShape(4, 4, 0, 12, 12, 16);
+            };
+        }
+
+        @Override
+        public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+            return shapeFor(state);
+        }
+
+        @Override
+        public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+            return shapeFor(state);
         }
     }
 
