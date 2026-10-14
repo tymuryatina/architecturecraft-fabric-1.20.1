@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "axis=x": { "model": "archcraft:block/beam_custom_x" },
+    "axis=y": { "model": "archcraft:block/beam_custom_y" },
+    "axis=z": { "model": "archcraft:block/beam_custom_z" }
+  }
+}
