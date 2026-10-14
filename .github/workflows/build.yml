@@ -19,6 +19,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.6'
+      - name: Validate mod resources
+        run: python3 scripts/validate_resources.py
       - name: Build
         run: gradle build --no-daemon
       - uses: actions/upload-artifact@v4
