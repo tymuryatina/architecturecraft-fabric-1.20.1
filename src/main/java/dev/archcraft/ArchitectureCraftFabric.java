@@ -184,6 +184,24 @@ public class ArchitectureCraftFabric implements ModInitializer {
         register("slab_dark_oak", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
         register("slab_acacia", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
 
+        // Complete the sawbench's wood-family outputs so every vanilla wood can be crafted.
+        register("pillar_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+        register("pillar_dark_oak", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.DARK_OAK_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+        register("pillar_acacia", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.ACACIA_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+        register("post_jungle", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.JUNGLE_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
+        register("slab_jungle", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.JUNGLE_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
+        register("pillar_jungle", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.JUNGLE_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+        register("slab_mangrove", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.MANGROVE_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
+        register("pillar_mangrove", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.MANGROVE_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+        register("slab_cherry", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.CHERRY_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
+        register("pillar_cherry", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.CHERRY_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+        register("post_crimson", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.CRIMSON_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
+        register("slab_crimson", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.CRIMSON_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
+        register("pillar_crimson", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.CRIMSON_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+        register("post_warped", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
+        register("slab_warped", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
+        register("pillar_warped", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+
 
     }
 
