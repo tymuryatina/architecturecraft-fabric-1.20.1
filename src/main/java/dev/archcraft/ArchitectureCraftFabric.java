@@ -29,6 +29,8 @@ import net.minecraft.world.BlockView;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.inventory.Inventory;
+import net.minecraft.util.ItemScatterer;
 import net.minecraft.world.World;
 import net.minecraft.util.math.Direction;
 import net.minecraft.block.BlockWithEntity;
@@ -216,6 +218,14 @@ public class ArchitectureCraftFabric implements ModInitializer {
         @Override protected void appendProperties(StateManager.Builder<Block, BlockState> builder) { builder.add(MODE); }
         @Override public BlockState getPlacementState(ItemPlacementContext ctx) { return getDefaultState().with(MODE, 0); }
         @Override public BlockEntity createBlockEntity(BlockPos pos, BlockState state) { return new SawbenchBlockEntity(pos, state); }
+        @Override public void onStateReplaced(BlockState state, World world, BlockPos pos, BlockState newState, boolean moved) {
+            if (!state.isOf(newState.getBlock()) && !world.isClient) {
+                BlockEntity entity = world.getBlockEntity(pos);
+                if (entity instanceof Inventory inventory) ItemScatterer.spawn(world, pos, inventory);
+                world.updateComparators(pos, this);
+            }
+            super.onStateReplaced(state, world, pos, newState, moved);
+        }
         @Override public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.MODEL; }
         @Override public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
             if (!world.isClient) {
