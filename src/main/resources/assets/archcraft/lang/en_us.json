@@ -57,5 +57,13 @@
   "moulding_birch": "Moulding Birch",
   "trim_birch": "Trim Birch",
   "pillar_oak": "Pillar Oak",
-  "pillar_spruce": "Pillar Spruce"
+  "pillar_spruce": "Pillar Spruce",
+  "block.archcraft.arch_d1": "Original Arch D1 (prototype profile)",
+  "block.archcraft.arch_d2": "Original Arch D2 (prototype profile)",
+  "block.archcraft.arch_d3a": "Original Arch D3A (prototype profile)",
+  "block.archcraft.arch_d3b": "Original Arch D3B (prototype profile)",
+  "block.archcraft.arch_d3c": "Original Arch D3C (prototype profile)",
+  "block.archcraft.arch_d4a": "Original Arch D4A (prototype profile)",
+  "block.archcraft.arch_d4b": "Original Arch D4B (prototype profile)",
+  "block.archcraft.arch_d4c": "Original Arch D4C (prototype profile)"
 }

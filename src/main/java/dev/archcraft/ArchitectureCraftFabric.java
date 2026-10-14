@@ -51,6 +51,14 @@ public class ArchitectureCraftFabric implements ModInitializer {
     private static AbstractBlock.Settings stone() { return AbstractBlock.Settings.copy(Blocks.STONE); }
 
     @Override public void onInitialize() {
+        register("arch_d1", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,4,12,12), Block.createCuboidShape(12,0,4,16,12,12), Block.createCuboidShape(4,8,4,12,16,12))));
+        register("arch_d2", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,4,10,12), Block.createCuboidShape(12,0,4,16,10,12), Block.createCuboidShape(4,8,4,12,12,12), Block.createCuboidShape(2,10,4,6,14,12), Block.createCuboidShape(10,10,4,14,14,12), Block.createCuboidShape(4,12,4,12,16,12))));
+        register("arch_d3a", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,3,12,12), Block.createCuboidShape(13,0,4,16,12,12), Block.createCuboidShape(3,8,4,6,14,12), Block.createCuboidShape(10,8,4,13,14,12), Block.createCuboidShape(6,12,4,10,16,12))));
+        register("arch_d3b", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,3,10,12), Block.createCuboidShape(13,0,4,16,10,12), Block.createCuboidShape(3,8,4,6,12,12), Block.createCuboidShape(10,8,4,13,12,12), Block.createCuboidShape(6,10,4,10,14,12), Block.createCuboidShape(4,14,4,12,16,12))));
+        register("arch_d3c", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,4,12,12), Block.createCuboidShape(12,0,4,16,12,12), Block.createCuboidShape(4,8,4,7,12,12), Block.createCuboidShape(9,8,4,12,12,12), Block.createCuboidShape(7,12,4,9,16,12))));
+        register("arch_d4a", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,3,12,12), Block.createCuboidShape(13,0,4,16,12,12), Block.createCuboidShape(3,8,4,5,12,12), Block.createCuboidShape(11,8,4,13,12,12), Block.createCuboidShape(5,10,4,7,14,12), Block.createCuboidShape(9,10,4,11,14,12), Block.createCuboidShape(7,14,4,9,16,12))));
+        register("arch_d4b", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,3,10,12), Block.createCuboidShape(13,0,4,16,10,12), Block.createCuboidShape(3,8,4,5,12,12), Block.createCuboidShape(11,8,4,13,12,12), Block.createCuboidShape(5,10,4,7,14,12), Block.createCuboidShape(9,10,4,11,14,12), Block.createCuboidShape(7,12,4,9,16,12))));
+        register("arch_d4c", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,4,4,12,12), Block.createCuboidShape(12,0,4,16,12,12), Block.createCuboidShape(4,8,4,6,12,12), Block.createCuboidShape(10,8,4,12,12,12), Block.createCuboidShape(6,10,4,8,14,12), Block.createCuboidShape(8,10,4,10,14,12), Block.createCuboidShape(6,14,4,10,16,12))));
         register("sawbench", new SawbenchBlock(wood()));
         register("railing_oak", new ShapeBlock(wood(), VoxelShapes.union(
             Block.createCuboidShape(0,0,0,16,3,16), Block.createCuboidShape(0,13,0,16,16,16),
