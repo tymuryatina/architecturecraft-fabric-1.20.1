@@ -17,6 +17,18 @@ public final class MaterialShapeBlockEntity extends BlockEntity {
 
     public String getMaterialBlock() { return materialBlock; }
 
+    /** Called when a sawbench-produced shape item is placed into the world. */
+    public void setMaterialIdentifier(Identifier id) {
+        String value = id == null ? "" : id.toString();
+        if (materialBlock.equals(value)) return;
+        materialBlock = value;
+        markDirty();
+        if (world != null) {
+            world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+            if (!world.isClient) world.getChunkManager().markForUpdate(pos);
+        }
+    }
+
     @Override public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         materialBlock = nbt.getString("MaterialBlock");
