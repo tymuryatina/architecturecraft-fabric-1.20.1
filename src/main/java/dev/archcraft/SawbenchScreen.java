@@ -21,15 +21,19 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
         super.init();
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        String[] names = {"Beam", "Post", "Slab", "Pillar"};
-        for (int i = 0; i < names.length; i++) {
-            final int mode = i;
-            addDrawableChild(ButtonWidget.builder(Text.literal(names[i]), button -> {
-                handler.setClientSelectedMode(mode);
-                if (client != null && client.interactionManager != null)
-                    client.interactionManager.clickButton(handler.syncId, mode);
-            }).dimensions(x + 8 + i * 41, y + 4, 39, 18).build());
-        }
+        int count = Math.max(1, ArchitectureCraftFabric.getSawbenchShapeCount());
+        addDrawableChild(ButtonWidget.builder(Text.literal("<"), button -> {
+            int mode = (handler.getSelectedMode() + count - 1) % count;
+            handler.setClientSelectedMode(mode);
+            if (client != null && client.interactionManager != null)
+                client.interactionManager.clickButton(handler.syncId, mode);
+        }).dimensions(x + 8, y + 4, 24, 18).build());
+        addDrawableChild(ButtonWidget.builder(Text.literal(">"), button -> {
+            int mode = (handler.getSelectedMode() + 1) % count;
+            handler.setClientSelectedMode(mode);
+            if (client != null && client.interactionManager != null)
+                client.interactionManager.clickButton(handler.syncId, mode);
+        }).dimensions(x + backgroundWidth - 32, y + 4, 24, 18).build());
     }
 
     @Override protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
@@ -62,8 +66,8 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
     @Override protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
         context.drawText(textRenderer, title, 8, -10, 0x40352A, false);
         context.drawText(textRenderer, playerInventoryTitle, 8, playerInventoryTitleY, 0xFFFFFF, false);
-        String[] modes = {"Beam", "Post", "Slab", "Pillar"};
-        context.drawText(textRenderer, "Shape: " + modes[handler.getSelectedMode()], 8, 26, 0xFFFFFF, false);
+        String shape = ArchitectureCraftFabric.getSawbenchShapeName(handler.getSelectedMode());
+        context.drawText(textRenderer, "Shape: " + shape, 8, 26, 0xFFFFFF, false);
     }
 
     @Override public boolean shouldPause() { return false; }
