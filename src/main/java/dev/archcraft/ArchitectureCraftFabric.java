@@ -66,6 +66,23 @@ public class ArchitectureCraftFabric implements ModInitializer {
         register("moulding_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,4,16),Block.createCuboidShape(0,4,0,16,8,12))));
         register("moulding_stone", new ShapeBlock(stone(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,4,16),Block.createCuboidShape(0,4,0,16,8,12))));
         register("window_frame_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,3,16),Block.createCuboidShape(0,13,0,16,16,16),Block.createCuboidShape(0,3,0,3,13,16),Block.createCuboidShape(13,3,0,16,13,16))));
+
+        register("railing_stone", new ShapeBlock(stone(), VoxelShapes.union(
+            Block.createCuboidShape(0,0,0,16,3,16), Block.createCuboidShape(0,13,0,16,16,16),
+            Block.createCuboidShape(2,3,2,5,13,5), Block.createCuboidShape(11,3,11,14,13,14))));
+        register("window_frame_stone", new ShapeBlock(stone(), VoxelShapes.union(
+            Block.createCuboidShape(0,0,0,16,3,16), Block.createCuboidShape(0,13,0,16,16,16),
+            Block.createCuboidShape(0,3,0,3,13,16), Block.createCuboidShape(13,3,0,16,13,16))));
+        register("corner_stone", new ShapeBlock(stone(), VoxelShapes.union(
+            Block.createCuboidShape(0,0,0,16,8,8), Block.createCuboidShape(0,0,8,8,16,16))));
+        register("corner_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), VoxelShapes.union(
+            Block.createCuboidShape(0,0,0,16,8,8), Block.createCuboidShape(0,0,8,8,16,16))));
+        register("moulding_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), VoxelShapes.union(
+            Block.createCuboidShape(0,0,0,16,4,16), Block.createCuboidShape(0,4,0,16,8,12))));
+        register("trim_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), Block.createCuboidShape(0,0,0,16,3,16)));
+        register("pillar_oak", new ShapeBlock(wood(), Block.createCuboidShape(3,0,3,13,16,13)));
+        register("pillar_spruce", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+
         register("trim_oak", new ShapeBlock(wood(), Block.createCuboidShape(0,0,0,16,3,16)));
         register("trim_stone", new ShapeBlock(stone(), Block.createCuboidShape(0,0,0,16,3,16)));
         register("post_oak", new ShapeBlock(wood(), Block.createCuboidShape(5,0,5,11,16,11)));

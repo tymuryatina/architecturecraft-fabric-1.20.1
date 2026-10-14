@@ -49,5 +49,13 @@
   "slab_spruce": "Slab Spruce",
   "slab_birch": "Slab Birch",
   "slab_dark_oak": "Slab Dark Oak",
-  "slab_acacia": "Slab Acacia"
+  "slab_acacia": "Slab Acacia",
+  "railing_stone": "Railing Stone",
+  "window_frame_stone": "Window Frame Stone",
+  "corner_stone": "Corner Stone",
+  "corner_birch": "Corner Birch",
+  "moulding_birch": "Moulding Birch",
+  "trim_birch": "Trim Birch",
+  "pillar_oak": "Pillar Oak",
+  "pillar_spruce": "Pillar Spruce"
 }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " S ",
+    "SSS",
+    " S "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "item": "archcraft:pillar_capital_stone",
+    "count": 2
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "SSS",
+    "   "
+  ],
+  "key": {
+    "S": {
+      "item": "minecraft:stone"
+    }
+  },
+  "result": {
+    "item": "archcraft:moulding_stone",
+    "count": 4
+  }
+}
