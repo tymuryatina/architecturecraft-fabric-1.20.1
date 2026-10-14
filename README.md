@@ -6,12 +6,12 @@ A community Fabric port prototype targeting Minecraft 1.20.1 and Java 17.
 
 - 50 registered architectural block variants, including beams, posts, columns, capitals, bases, cornices, brackets, sills, railings, window frames, lattice and panels.
 - Custom block models and voxel selection/collision shapes for the implemented profiles.
-- Basic crafting recipes, item models, English names and block loot tables.
+- Basic crafting recipes, item models, English names and block loot tables.\n- A first working sawbench interaction: use planks or stone on it to cut beams, or crouch to request a post where that material exists.
 - GitHub Actions build workflow that compiles the project and uploads the JAR artifact.
 
 ## Important limitations
 
-This is **not yet feature-complete ArchitectureCraft**. The original dynamic shape/material system is not ported. The sawbench is currently a registered block placeholder and does not yet have the original working GUI or cutting logic. Rotation/orientation controls, advanced geometry, original textures, and in-game testing still need work. A successful Gradle build only confirms compilation and resource processing; it does not prove that every feature works in-game.
+This is **not yet feature-complete ArchitectureCraft**. The original dynamic shape/material system is not ported. The sawbench now has a basic right-click cutting interaction, but does not yet have the original selection GUI or arbitrary-shape cutting logic. Rotation/orientation controls, advanced geometry, original textures, and in-game testing still need work. A successful Gradle build only confirms compilation and resource processing; it does not prove that every feature works in-game.
 
 ## Build and install
 
