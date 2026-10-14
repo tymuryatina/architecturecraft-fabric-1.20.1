@@ -52,16 +52,26 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
     @Override public boolean isEmpty() { return inventory.stream().allMatch(ItemStack::isEmpty); }
     @Override public ItemStack getStack(int slot) { return inventory.get(slot); }
     @Override public ItemStack removeStack(int slot, int amount) {
+        if (slot < 0 || slot >= inventory.size() || amount <= 0) return ItemStack.EMPTY;
         ItemStack result = Inventories.splitStack(inventory, slot, amount);
-        if (!result.isEmpty()) { markDirty(); if (slot == 1) craft(); }
+        if (!result.isEmpty()) {
+            markDirty();
+            if (slot == 1) craft();
+        }
         return result;
     }
     @Override public ItemStack removeStack(int slot) {
+        if (slot < 0 || slot >= inventory.size()) return ItemStack.EMPTY;
         ItemStack result = Inventories.removeStack(inventory, slot);
-        if (!result.isEmpty()) markDirty();
+        if (!result.isEmpty()) {
+            markDirty();
+            // Also resume production when a hopper or player removes the whole output stack.
+            if (slot == 1) craft();
+        }
         return result;
     }
     @Override public void setStack(int slot, ItemStack stack) {
+        if (slot < 0 || slot >= inventory.size()) return;
         inventory.set(slot, stack);
         if (stack.getCount() > getMaxCountPerStack()) stack.setCount(getMaxCountPerStack());
         markDirty();
@@ -118,6 +128,7 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
         super.readNbt(nbt);
         Inventories.readNbt(nbt, inventory);
         selectedMode = nbt.contains("SelectedMode") ? nbt.getInt("SelectedMode") : 0;
+        if (selectedMode < 0 || selectedMode > 3) selectedMode = 0;
     }
     @Override public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
