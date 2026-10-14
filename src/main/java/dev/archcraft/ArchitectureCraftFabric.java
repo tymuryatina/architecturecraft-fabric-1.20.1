@@ -53,6 +53,16 @@ public class ArchitectureCraftFabric implements ModInitializer {
     public static ScreenHandlerType<SawbenchScreenHandler> SAWBENCH_SCREEN_HANDLER;
     public static BlockEntityType<MaterialShapeBlockEntity> MATERIAL_SHAPE_BLOCK_ENTITY;
     private static final List<Block> MATERIAL_SHAPE_BLOCKS = new ArrayList<>();
+    /** All registered architectural shapes are selectable in the sawbench, regardless of material family. */
+    public static int getSawbenchShapeCount() { return MATERIAL_SHAPE_BLOCKS.size(); }
+    public static Identifier getSawbenchShapeId(int index) {
+        if (index < 0 || index >= MATERIAL_SHAPE_BLOCKS.size()) return null;
+        return Registries.BLOCK.getId(MATERIAL_SHAPE_BLOCKS.get(index));
+    }
+    public static String getSawbenchShapeName(int index) {
+        Identifier id = getSawbenchShapeId(index);
+        return id == null ? "Unknown" : id.getPath().replace('_', ' ');
+    }
     private static Block register(String name, Block block) {
         Identifier id = new Identifier(MOD_ID, name);
         Block registered = Registry.register(Registries.BLOCK, id, block);
