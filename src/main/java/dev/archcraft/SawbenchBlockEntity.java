@@ -124,14 +124,22 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
         Identifier outputId = getOutputId(getMaterial(input));
         if (outputId == null) return;
         ItemStack output = inventory.get(1);
-        if (!output.isEmpty() && (!Registries.ITEM.getId(output.getItem()).equals(outputId) || output.getCount() > output.getMaxCount() - 4)) return;
+        // Capture the source before decrementing: a stack that reaches zero becomes EMPTY
+        // and no longer exposes its BlockItem, which previously silently dropped the texture.
+        Identifier materialId = getMaterialBlockId(input);
+        if (!output.isEmpty()) {
+            if (!Registries.ITEM.getId(output.getItem()).equals(outputId) || output.getCount() > output.getMaxCount() - 4) return;
+            String existingMaterial = output.hasNbt() && output.getSubNbt("BlockEntityTag") != null
+                ? output.getSubNbt("BlockEntityTag").getString("MaterialBlock") : "";
+            String incomingMaterial = materialId == null ? "" : materialId.toString();
+            if (!existingMaterial.equals(incomingMaterial)) return;
+        }
 
         crafting = true;
         input.decrement(1);
         if (input.isEmpty()) inventory.set(0, ItemStack.EMPTY);
         if (output.isEmpty()) {
             ItemStack crafted = new ItemStack(Registries.ITEM.get(outputId), 4);
-            Identifier materialId = getMaterialBlockId(input);
             if (materialId != null) crafted.getOrCreateSubNbt("BlockEntityTag").putString("MaterialBlock", materialId.toString());
             inventory.set(1, crafted);
         } else output.increment(4);
