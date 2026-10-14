@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    " M "
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:cherry_planks"
+    }
+  },
+  "result": {
+    "item": "archcraft:pillar_cherry",
+    "count": 2
+  }
+}

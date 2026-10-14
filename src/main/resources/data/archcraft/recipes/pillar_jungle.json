@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    " M "
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:jungle_planks"
+    }
+  },
+  "result": {
+    "item": "archcraft:pillar_jungle",
+    "count": 2
+  }
+}
