@@ -155,5 +155,9 @@
   "block.archcraft.slab_spruce": "Slab Spruce",
   "block.archcraft.slab_birch": "Slab Birch",
   "block.archcraft.slab_dark_oak": "Slab Dark Oak",
-  "block.archcraft.slab_acacia": "Slab Acacia"
+  "block.archcraft.slab_acacia": "Slab Acacia",
+  "block.archcraft.beam_custom": "Beam (Custom Material)",
+  "block.archcraft.post_custom": "Post (Custom Material)",
+  "block.archcraft.slab_custom": "Slab (Custom Material)",
+  "block.archcraft.pillar_custom": "Pillar (Custom Material)"
 }
