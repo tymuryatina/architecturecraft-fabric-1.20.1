@@ -34,6 +34,8 @@ import net.minecraft.util.ItemScatterer;
 import net.minecraft.world.World;
 import net.minecraft.util.math.Direction;
 import net.minecraft.block.BlockWithEntity;
+import java.util.ArrayList;
+import java.util.List;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.screen.ScreenHandlerType;
@@ -49,9 +51,12 @@ public class ArchitectureCraftFabric implements ModInitializer {
     public static Block SAWBENCH_BLOCK;
     public static BlockEntityType<SawbenchBlockEntity> SAWBENCH_BLOCK_ENTITY;
     public static ScreenHandlerType<SawbenchScreenHandler> SAWBENCH_SCREEN_HANDLER;
+    public static BlockEntityType<MaterialShapeBlockEntity> MATERIAL_SHAPE_BLOCK_ENTITY;
+    private static final List<Block> MATERIAL_SHAPE_BLOCKS = new ArrayList<>();
     private static Block register(String name, Block block) {
         Identifier id = new Identifier(MOD_ID, name);
         Block registered = Registry.register(Registries.BLOCK, id, block);
+        if (block instanceof ShapeBlock || block instanceof AxisShapeBlock) MATERIAL_SHAPE_BLOCKS.add(registered);
         Registry.register(Registries.ITEM, id, new BlockItem(registered, new Item.Settings()));
         ItemGroupEvents.modifyEntriesEvent(name.equals("sawbench") ? ItemGroups.FUNCTIONAL : ItemGroups.BUILDING_BLOCKS).register(entries -> entries.add(registered));
         return registered;
@@ -203,6 +208,7 @@ public class ArchitectureCraftFabric implements ModInitializer {
         register("post_warped", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS), Block.createCuboidShape(5,0,5,11,16,11)));
         register("slab_warped", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS), Block.createCuboidShape(0,0,0,16,8,16)));
         register("pillar_warped", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.WARPED_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+        MATERIAL_SHAPE_BLOCK_ENTITY = Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(MOD_ID, "material_shape"), BlockEntityType.Builder.create(MaterialShapeBlockEntity::new, MATERIAL_SHAPE_BLOCKS.toArray(new Block[0])).build(null));
 
 
     }
@@ -237,7 +243,7 @@ public class ArchitectureCraftFabric implements ModInitializer {
     }
 
     /** Axis-aware beam with matching placement, collision and selection geometry. */
-    public static class AxisShapeBlock extends Block {
+    public static class AxisShapeBlock extends BlockWithEntity {
         public static final EnumProperty<Direction.Axis> AXIS = EnumProperty.of("axis", Direction.Axis.class);
 
         public AxisShapeBlock(AbstractBlock.Settings settings) {
@@ -249,6 +255,9 @@ public class ArchitectureCraftFabric implements ModInitializer {
         protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
             builder.add(AXIS);
         }
+
+        @Override public BlockEntity createBlockEntity(BlockPos pos, BlockState state) { return new MaterialShapeBlockEntity(pos, state); }
+        @Override public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.MODEL; }
 
         @Override
         public BlockState getPlacementState(ItemPlacementContext ctx) {
@@ -274,9 +283,11 @@ public class ArchitectureCraftFabric implements ModInitializer {
         }
     }
 
-    public static class ShapeBlock extends Block {
+    public static class ShapeBlock extends BlockWithEntity {
         private final VoxelShape shape;
         public ShapeBlock(AbstractBlock.Settings settings, VoxelShape shape) { super(settings); this.shape = shape; }
+        @Override public BlockEntity createBlockEntity(BlockPos pos, BlockState state) { return new MaterialShapeBlockEntity(pos, state); }
+        @Override public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.MODEL; }
         @Override public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) { return shape; }
         @Override public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) { return shape; }
     }

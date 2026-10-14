@@ -95,6 +95,12 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
         return null;
     }
 
+    private Identifier getMaterialBlockId(ItemStack stack) {
+        if (stack.isEmpty()) return null;
+        if (stack.getItem() instanceof net.minecraft.item.BlockItem blockItem) return Registries.BLOCK.getId(blockItem.getBlock());
+        return null;
+    }
+
     private Identifier getOutputId(String material) {
         if (material == null) return null;
         String prefix = switch (selectedMode) {
@@ -123,8 +129,12 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
         crafting = true;
         input.decrement(1);
         if (input.isEmpty()) inventory.set(0, ItemStack.EMPTY);
-        if (output.isEmpty()) inventory.set(1, new ItemStack(Registries.ITEM.get(outputId), 4));
-        else output.increment(4);
+        if (output.isEmpty()) {
+            ItemStack crafted = new ItemStack(Registries.ITEM.get(outputId), 4);
+            Identifier materialId = getMaterialBlockId(input);
+            if (materialId != null) crafted.getOrCreateSubNbt("BlockEntityTag").putString("MaterialBlock", materialId.toString());
+            inventory.set(1, crafted);
+        } else output.increment(4);
         crafting = false;
         markDirty();
     }
