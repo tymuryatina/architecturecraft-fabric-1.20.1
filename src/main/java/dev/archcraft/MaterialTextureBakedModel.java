@@ -64,10 +64,15 @@ public final class MaterialTextureBakedModel extends ForwardingBakedModel {
         Sprite source = wrapped.getParticleSprite();
         if (source == null || source == target) return true;
         for (int vertex = 0; vertex < 4; vertex++) {
-            float u = source.getFrameU(quad.spriteU(0, vertex));
-            float v = source.getFrameV(quad.spriteV(0, vertex));
-            float normalizedU = (u - source.getMinU()) / (source.getMaxU() - source.getMinU());
-            float normalizedV = (v - source.getMinV()) / (source.getMaxV() - source.getMinV());
+            // FRAPI spriteU/spriteV already return atlas coordinates, not normalized 0..1 UVs.
+            // Convert atlas -> source-sprite local coordinates -> target atlas coordinates.
+            float u = quad.spriteU(0, vertex);
+            float v = quad.spriteV(0, vertex);
+            float sourceWidth = source.getMaxU() - source.getMinU();
+            float sourceHeight = source.getMaxV() - source.getMinV();
+            if (sourceWidth == 0.0f || sourceHeight == 0.0f) return true;
+            float normalizedU = (u - source.getMinU()) / sourceWidth;
+            float normalizedV = (v - source.getMinV()) / sourceHeight;
             quad.sprite(0, vertex, target.getMinU() + normalizedU * (target.getMaxU() - target.getMinU()),
                 target.getMinV() + normalizedV * (target.getMaxV() - target.getMinV()));
         }
