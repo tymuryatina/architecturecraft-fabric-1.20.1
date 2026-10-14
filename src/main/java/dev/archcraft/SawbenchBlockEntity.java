@@ -72,30 +72,36 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
         return world != null && world.getBlockEntity(pos) == this &&
             player.squaredDistanceTo(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64.0;
     }
-    @Override public boolean isValid(int slot, ItemStack stack) {
-        if (slot != 0) return false;
+    private String getMaterial(ItemStack stack) {
+        if (stack.isEmpty()) return null;
         String path = Registries.ITEM.getId(stack.getItem()).getPath();
-        return path.endsWith("_planks") || path.equals("stone") || path.equals("cobblestone");
+        if (path.endsWith("_planks")) return path.substring(0, path.length() - "_planks".length());
+        if (path.equals("stone") || path.equals("cobblestone")) return "stone";
+        return null;
     }
 
-    private void craft() {
-        if (crafting || world == null || world.isClient) return;
-        ItemStack input = inventory.get(0);
-        if (input.isEmpty()) return;
-        String path = Registries.ITEM.getId(input.getItem()).getPath();
-        String material;
-        if (path.endsWith("_planks")) material = path.substring(0, path.length() - "_planks".length());
-        else if (path.equals("stone") || path.equals("cobblestone")) material = "stone";
-        else return;
-
+    private Identifier getOutputId(String material) {
+        if (material == null) return null;
         String prefix = switch (selectedMode) {
             case 1 -> "post_";
             case 2 -> "slab_";
             case 3 -> "pillar_";
             default -> "beam_";
         };
-        Identifier outputId = new Identifier(ArchitectureCraftFabric.MOD_ID, prefix + material);
-        if (!Registries.ITEM.containsId(outputId)) return;
+        Identifier id = new Identifier(ArchitectureCraftFabric.MOD_ID, prefix + material);
+        return Registries.ITEM.containsId(id) ? id : null;
+    }
+
+    @Override public boolean isValid(int slot, ItemStack stack) {
+        return slot == 0 && getOutputId(getMaterial(stack)) != null;
+    }
+
+    private void craft() {
+        if (crafting || world == null || world.isClient) return;
+        ItemStack input = inventory.get(0);
+        if (input.isEmpty()) return;
+        Identifier outputId = getOutputId(getMaterial(input));
+        if (outputId == null) return;
         ItemStack output = inventory.get(1);
         if (!output.isEmpty() && (!Registries.ITEM.getId(output.getItem()).equals(outputId) || output.getCount() > output.getMaxCount() - 4)) return;
 
