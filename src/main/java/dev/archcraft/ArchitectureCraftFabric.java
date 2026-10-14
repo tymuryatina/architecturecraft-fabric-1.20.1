@@ -219,6 +219,22 @@ public class ArchitectureCraftFabric implements ModInitializer {
     }
 
 
+    private static void copyMaterialFromStack(World world, BlockPos pos, ItemStack stack) {
+        if (world.isClient || stack == null || !stack.hasNbt()) return;
+        net.minecraft.nbt.NbtCompound tag = stack.getSubNbt("BlockEntityTag");
+        if (tag == null || !tag.contains("MaterialBlock")) return;
+        try {
+            Identifier materialId = new Identifier(tag.getString("MaterialBlock"));
+            BlockEntity entity = world.getBlockEntity(pos);
+            if (entity instanceof MaterialShapeBlockEntity materialEntity
+                    && Registries.BLOCK.containsId(materialId)) {
+                materialEntity.setMaterialIdentifier(materialId);
+            }
+        } catch (RuntimeException ignored) {
+            // Ignore malformed item data rather than preventing block placement.
+        }
+    }
+
     /** Separate workbench block with a server-backed inventory screen. */
     public static class SawbenchBlock extends BlockWithEntity {
         public SawbenchBlock(AbstractBlock.Settings settings) {
@@ -262,6 +278,7 @@ public class ArchitectureCraftFabric implements ModInitializer {
         }
 
         @Override public BlockEntity createBlockEntity(BlockPos pos, BlockState state) { return new MaterialShapeBlockEntity(pos, state); }
+        @Override public void onPlaced(World world, BlockPos pos, BlockState state, net.minecraft.entity.LivingEntity placer, ItemStack stack) { super.onPlaced(world, pos, state, placer, stack); copyMaterialFromStack(world, pos, stack); }
         @Override public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.MODEL; }
 
         @Override
@@ -292,6 +309,7 @@ public class ArchitectureCraftFabric implements ModInitializer {
         private final VoxelShape shape;
         public ShapeBlock(AbstractBlock.Settings settings, VoxelShape shape) { super(settings); this.shape = shape; }
         @Override public BlockEntity createBlockEntity(BlockPos pos, BlockState state) { return new MaterialShapeBlockEntity(pos, state); }
+        @Override public void onPlaced(World world, BlockPos pos, BlockState state, net.minecraft.entity.LivingEntity placer, ItemStack stack) { super.onPlaced(world, pos, state, placer, stack); copyMaterialFromStack(world, pos, stack); }
         @Override public BlockRenderType getRenderType(BlockState state) { return BlockRenderType.MODEL; }
         @Override public VoxelShape getOutlineShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) { return shape; }
         @Override public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) { return shape; }
