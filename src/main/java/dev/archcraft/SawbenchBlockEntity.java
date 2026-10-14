@@ -88,11 +88,12 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
             player.squaredDistanceTo(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64.0;
     }
     private String getMaterial(ItemStack stack) {
-        if (stack.isEmpty()) return null;
+        if (stack.isEmpty() || !(stack.getItem() instanceof net.minecraft.item.BlockItem)) return null;
         String path = Registries.ITEM.getId(stack.getItem()).getPath();
         if (path.endsWith("_planks")) return path.substring(0, path.length() - "_planks".length());
         if (path.equals("stone") || path.equals("cobblestone")) return "stone";
-        return null;
+        // Unknown vanilla/modded block items use a generic shape with their source block stored in NBT.
+        return "custom";
     }
 
     private Identifier getMaterialBlockId(ItemStack stack) {
@@ -110,7 +111,9 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
             default -> "beam_";
         };
         Identifier id = new Identifier(ArchitectureCraftFabric.MOD_ID, prefix + material);
-        return Registries.ITEM.containsId(id) ? id : null;
+        if (Registries.ITEM.containsId(id)) return id;
+        Identifier genericId = new Identifier(ArchitectureCraftFabric.MOD_ID, prefix + "custom");
+        return Registries.ITEM.containsId(genericId) ? genericId : null;
     }
 
     @Override public boolean isValid(int slot, ItemStack stack) {
