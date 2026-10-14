@@ -107,12 +107,12 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
         markDirty();
     }
 
-    @Override protected void readNbt(NbtCompound nbt) {
+    @Override public void readNbt(NbtCompound nbt) {
         super.readNbt(nbt);
         Inventories.readNbt(nbt, inventory);
         selectedMode = nbt.contains("SelectedMode") ? nbt.getInt("SelectedMode") : 0;
     }
-    @Override protected void writeNbt(NbtCompound nbt) {
+    @Override public void writeNbt(NbtCompound nbt) {
         super.writeNbt(nbt);
         Inventories.writeNbt(nbt, inventory);
         nbt.putInt("SelectedMode", selectedMode);
