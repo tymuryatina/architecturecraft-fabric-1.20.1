@@ -63,18 +63,20 @@ public final class MaterialTextureBakedModel extends ForwardingBakedModel {
     private boolean remap(MutableQuadView quad, Sprite target) {
         Sprite source = wrapped.getParticleSprite();
         if (source == null || source == target) return true;
+        // FRAPI's parameter order is (vertexIndex, spriteIndex). These quads use sprite index 0.
+        // spriteU/spriteV return atlas coordinates, so convert atlas -> source-local -> target-atlas.
+        float sourceWidth = source.getMaxU() - source.getMinU();
+        float sourceHeight = source.getMaxV() - source.getMinV();
+        if (sourceWidth == 0.0f || sourceHeight == 0.0f) return true;
+        float targetWidth = target.getMaxU() - target.getMinU();
+        float targetHeight = target.getMaxV() - target.getMinV();
         for (int vertex = 0; vertex < 4; vertex++) {
-            // FRAPI spriteU/spriteV already return atlas coordinates, not normalized 0..1 UVs.
-            // Convert atlas -> source-sprite local coordinates -> target atlas coordinates.
-            float u = quad.spriteU(0, vertex);
-            float v = quad.spriteV(0, vertex);
-            float sourceWidth = source.getMaxU() - source.getMinU();
-            float sourceHeight = source.getMaxV() - source.getMinV();
-            if (sourceWidth == 0.0f || sourceHeight == 0.0f) return true;
+            float u = quad.spriteU(vertex, 0);
+            float v = quad.spriteV(vertex, 0);
             float normalizedU = (u - source.getMinU()) / sourceWidth;
             float normalizedV = (v - source.getMinV()) / sourceHeight;
-            quad.sprite(0, vertex, target.getMinU() + normalizedU * (target.getMaxU() - target.getMinU()),
-                target.getMinV() + normalizedV * (target.getMaxV() - target.getMinV()));
+            quad.sprite(vertex, 0, target.getMinU() + normalizedU * targetWidth,
+                target.getMinV() + normalizedV * targetHeight);
         }
         return true;
     }
