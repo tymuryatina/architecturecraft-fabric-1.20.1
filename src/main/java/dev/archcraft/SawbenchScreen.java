@@ -39,12 +39,23 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
         context.fill(x + 4, y + 26, x + backgroundWidth - 4, y + 75, 0xFF6D5B49);
         context.fill(x + 42, y + 33, x + 62, y + 53, 0xFF302A24);
         context.fill(x + 114, y + 33, x + 134, y + 53, 0xFF302A24);
-        // Show the source block texture, resolved from the active resource/model registry.
-        // This works with vanilla blocks and blocks supplied by other mods without hardcoded texture paths.
-        net.minecraft.client.texture.Sprite materialSprite = MaterialTextureResolver.findParticleSprite(handler.getSlot(0).getStack());
-        if (materialSprite != null) context.drawSprite(x + 66, y + 35, 0, 16, 16, materialSprite);
-        context.drawText(textRenderer, Text.literal("Input"), x + 39, y + 57, 0xFFFFFF, false);
-        context.drawText(textRenderer, Text.literal("Output"), x + 108, y + 57, 0xFFFFFF, false);
+        // Show a framed, enlarged material swatch resolved from the active model registry.
+        // Vanilla, modded block models, and resource-pack overrides share this lookup path.
+        context.fill(x + 68, y + 31, x + 94, y + 57, 0xFF302A24);
+        net.minecraft.item.ItemStack material = handler.getSlot(0).getStack();
+        net.minecraft.client.texture.Sprite materialSprite = MaterialTextureResolver.findParticleSprite(material);
+        if (materialSprite != null) {
+            context.drawSprite(x + 71, y + 34, 0, 20, 20, materialSprite);
+        } else {
+            context.fill(x + 71, y + 34, x + 91, y + 54, 0xFF51483E);
+        }
+        context.drawText(textRenderer, Text.literal("Input"), x + 39, y + 59, 0xFFFFFF, false);
+        context.drawText(textRenderer, Text.literal("Material"), x + 68, y + 61, 0xFFFFFF, false);
+        if (!material.isEmpty()) {
+            String materialName = textRenderer.trimToWidth(material.getName().getString(), 66);
+            context.drawText(textRenderer, materialName, x + 68, y + 71, 0xFFF2E5D3, false);
+        }
+        context.drawText(textRenderer, Text.literal("Output"), x + 108, y + 59, 0xFFFFFF, false);
         context.fill(x + 7, y + 80, x + backgroundWidth - 7, y + backgroundHeight - 7, 0xFF8C7964);
     }
 
