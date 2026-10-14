@@ -1,24 +1,31 @@
 # ArchitectureCraft Fabric — Minecraft Java 1.20.1
 
-A community Fabric port prototype targeting Minecraft 1.20.1 and Java 17.
+A community Fabric port targeting Minecraft 1.20.1 and Java 17.
+
+## Progress
+
+**Estimated overall completion: about 30%.** The goal is a playable JAR that can be installed without compiling source code. A successful CI build only verifies compilation and resource processing, not in-game behavior.
 
 ## Current implementation
 
-- 58 registered architectural block variants, including beams, posts, columns, capitals, bases, cornices, brackets, sills, railings, window frames, lattice and panels.
-- Custom block models and voxel selection/collision shapes for the implemented profiles. Beams now place along the clicked face axis (X/Y/Z), with matching models and collision.
-- Basic crafting recipes, item models, English names and block loot tables, including expanded stone and birch trim variants.\n- A basic sawbench interaction with four selectable profiles (beam, post, slab, pillar): click it with an empty hand to cycle mode, then use planks or stone to cut a matching shape where available.
-- GitHub Actions build workflow that compiles the project and uploads the JAR artifact.
+- A **separate Sawbench block** with its own block model, item, loot table, and recipe.
+- A first client-side profile-selection screen for Beam, Post, Slab, and Pillar, opened by crouching and interacting with the Sawbench.
+- A basic material-on-bench cutting interaction for supported plank/stone profiles.
+- Architectural block families including beams, posts, columns, capitals, bases, cornices, brackets, sills, railings, window frames, lattice, panels, and trim.
+- Eight named arch profiles (D1, D2, D3A/B/C, D4A/B/C), with prototype material variants for oak, spruce, birch, dark oak, and stone.
+- Basic recipes, item models, blockstates, English names, and loot tables for implemented variants.
+- GitHub Actions workflow that compiles the project and uploads a JAR artifact.
 
 ## Important limitations
 
-This is **not yet feature-complete ArchitectureCraft**. The original dynamic shape/material system is not ported. The sawbench now has a basic right-click cutting interaction, but does not yet have the original selection GUI, persistent inventory slots, or arbitrary-shape cutting logic. Rotation/orientation controls, advanced geometry, original textures, and in-game testing still need work. A successful Gradle build only confirms compilation and resource processing; it does not prove that every feature works in-game.
+This is **not yet 95% equivalent to original ArchitectureCraft**. The Sawbench GUI is an initial profile selector, not the complete original interface. It does not yet implement the full upstream material picker, persistent input/output inventory slots, or arbitrary-shape cutting. Arch collision/outline profiles are crude voxel approximations, not exact upstream geometry. Texture fidelity, rotation/orientation controls, broad material support, and in-game testing remain incomplete.
 
-## Build and install
+The target is to reproduce the original separate workbench and its workflow as closely as possible, then verify the resulting JAR in Minecraft 1.20.1 with Fabric API.
 
-Build with Java 17 and Gradle using `gradle build`. Or open the latest successful run under [GitHub Actions](https://github.com/tymuryatina/architecturecraft-fabric-1.20.1/actions) and download its JAR artifact.
+## Install a built JAR
 
-Install Fabric Loader for Minecraft 1.20.1 plus Fabric API, then place the JAR in the game's `mods` folder.
+Open the [GitHub Actions runs](https://github.com/tymuryatina/architecturecraft-fabric-1.20.1/actions), select a successful build, and download the `architecturecraft-fabric-1.20.1` artifact. Install Fabric Loader for Minecraft 1.20.1 and Fabric API, then put the downloaded mod JAR in the game's `mods` folder. This is an early prototype and is not yet represented as a finished 100% release.
 
 ## Upstream
 
-Based on the MIT-licensed [TridentMC/ArchitectureCraft](https://github.com/TridentMC/ArchitectureCraft) project. This repository is an independent compatibility port; it is not an official upstream release.
+Based on the MIT-licensed [TridentMC/ArchitectureCraft](https://github.com/TridentMC/ArchitectureCraft/tree/1.21) project. This repository is an independent compatibility port, not an official upstream release.
