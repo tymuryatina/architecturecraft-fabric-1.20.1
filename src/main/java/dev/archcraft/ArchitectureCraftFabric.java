@@ -126,8 +126,11 @@ public class ArchitectureCraftFabric implements ModInitializer {
         register("pillar_base_stone", new ShapeBlock(stone(), VoxelShapes.union(Block.createCuboidShape(3,4,3,13,16,13),Block.createCuboidShape(1,0,1,15,4,15))));
         register("beam_oak", new AxisShapeBlock(wood()));
         register("beam_stone", new AxisShapeBlock(stone()));
+        // Generic material-backed outputs support arbitrary BlockItems in the sawbench.
+        register("beam_custom", new AxisShapeBlock(wood()));
         register("slab_oak", new ShapeBlock(wood(), Block.createCuboidShape(0,0,0,16,8,16)));
         register("slab_stone", new ShapeBlock(stone(), Block.createCuboidShape(0,0,0,16,8,16)));
+        register("slab_custom", new ShapeBlock(wood(), Block.createCuboidShape(0,0,0,16,8,16)));
         register("corner_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,8,8),Block.createCuboidShape(0,0,8,8,16,16))));
         register("moulding_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,4,16),Block.createCuboidShape(0,4,0,16,8,12))));
         register("moulding_stone", new ShapeBlock(stone(), VoxelShapes.union(Block.createCuboidShape(0,0,0,16,4,16),Block.createCuboidShape(0,4,0,16,8,12))));
@@ -148,11 +151,13 @@ public class ArchitectureCraftFabric implements ModInitializer {
         register("trim_birch", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.BIRCH_PLANKS), Block.createCuboidShape(0,0,0,16,3,16)));
         register("pillar_oak", new ShapeBlock(wood(), Block.createCuboidShape(3,0,3,13,16,13)));
         register("pillar_spruce", new ShapeBlock(AbstractBlock.Settings.copy(Blocks.SPRUCE_PLANKS), Block.createCuboidShape(3,0,3,13,16,13)));
+        register("pillar_custom", new ShapeBlock(wood(), Block.createCuboidShape(3,0,3,13,16,13)));
 
         register("trim_oak", new ShapeBlock(wood(), Block.createCuboidShape(0,0,0,16,3,16)));
         register("trim_stone", new ShapeBlock(stone(), Block.createCuboidShape(0,0,0,16,3,16)));
         register("post_oak", new ShapeBlock(wood(), Block.createCuboidShape(5,0,5,11,16,11)));
         register("post_stone", new ShapeBlock(stone(), Block.createCuboidShape(5,0,5,11,16,11)));
+        register("post_custom", new ShapeBlock(wood(), Block.createCuboidShape(5,0,5,11,16,11)));
 
         // Additional architectural profiles. These use real voxel geometry for collision and selection.
         register("arch_support_oak", new ShapeBlock(wood(), VoxelShapes.union(Block.createCuboidShape(0,0,0,5,16,16), Block.createCuboidShape(11,0,0,16,16,16), Block.createCuboidShape(5,11,0,11,16,16))));
