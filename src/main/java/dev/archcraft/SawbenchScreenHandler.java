@@ -44,7 +44,7 @@ public final class SawbenchScreenHandler extends ScreenHandler {
     public void setClientSelectedMode(int mode) { selectedMode = mode; }
 
     @Override public boolean onButtonClick(PlayerEntity player, int id) {
-        if (id < 0 || id > 3) return false;
+        if (id < 0 || id >= ArchitectureCraftFabric.getSawbenchShapeCount()) return false;
         selectedMode = id;
         context.run((world, pos) -> {
             if (world.getBlockEntity(pos) instanceof SawbenchBlockEntity bench) bench.setSelectedMode(id);
