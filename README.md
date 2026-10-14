@@ -4,7 +4,7 @@ A community Fabric port prototype targeting Minecraft 1.20.1 and Java 17.
 
 ## Current implementation
 
-- 34+ registered architectural block variants, including beams, posts, columns, capitals, bases, cornices, brackets, sills, railings, window frames, lattice and panels.
+- 50 registered architectural block variants, including beams, posts, columns, capitals, bases, cornices, brackets, sills, railings, window frames, lattice and panels.
 - Custom block models and voxel selection/collision shapes for the implemented profiles.
 - Basic crafting recipes, item models, English names and block loot tables.
 - GitHub Actions build workflow that compiles the project and uploads the JAR artifact.
