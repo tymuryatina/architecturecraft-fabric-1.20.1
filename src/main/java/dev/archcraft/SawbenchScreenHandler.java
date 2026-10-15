@@ -31,18 +31,18 @@ public final class SawbenchScreenHandler extends ScreenHandler {
         addProperties(selectedModeProperty);
         inventory.onOpen(playerInventory.player);
 
-        addSlot(new Slot(inventory, 0, 44, 35) {
+        addSlot(new Slot(inventory, 0, 44, 113) {
             @Override public boolean canInsert(ItemStack stack) { return inventory.isValid(0, stack); }
         });
-        addSlot(new Slot(inventory, 1, 116, 35) {
+        addSlot(new Slot(inventory, 1, 116, 113) {
             @Override public boolean canInsert(ItemStack stack) { return false; }
         });
 
         for (int row = 0; row < 3; ++row)
             for (int col = 0; col < 9; ++col)
-                addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
+                addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 140 + row * 18));
         for (int col = 0; col < 9; ++col)
-            addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
+            addSlot(new Slot(playerInventory, col, 8 + col * 18, 198));
     }
 
     public int getSelectedMode() { return selectedModeProperty.get(0); }
