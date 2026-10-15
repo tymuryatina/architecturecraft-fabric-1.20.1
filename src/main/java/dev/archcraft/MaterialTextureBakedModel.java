@@ -13,6 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.BlockRenderView;
 
@@ -28,35 +29,49 @@ public final class MaterialTextureBakedModel extends ForwardingBakedModel {
 
     @Override public void emitBlockQuads(BlockRenderView view, BlockState state, BlockPos pos,
             Supplier<Random> random, RenderContext context) {
-        Sprite target = null;
+        BlockState materialState = null;
         if (view.getBlockEntity(pos) instanceof MaterialShapeBlockEntity materialEntity) {
             Identifier id = materialEntity.getMaterialIdentifier();
-            if (id != null && Registries.BLOCK.containsId(id)) {
-                BlockState materialState = Registries.BLOCK.get(id).getDefaultState();
-                target = MinecraftClient.getInstance().getBlockRenderManager().getModel(materialState).getParticleSprite();
-            }
+            if (id != null && Registries.BLOCK.containsId(id)) materialState = Registries.BLOCK.get(id).getDefaultState();
         }
-        emitWithSprite(target, random, context, () -> ((net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) wrapped)
-            .emitBlockQuads(view, state, pos, random, context));
+        BakedModel materialModel = materialState == null ? null
+            : MinecraftClient.getInstance().getBlockRenderManager().getModel(materialState);
+        emitWithMaterialModel(materialState, materialModel, random, context,
+            () -> ((net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) wrapped)
+                .emitBlockQuads(view, state, pos, random, context));
     }
 
     @Override public void emitItemQuads(ItemStack stack, Supplier<Random> random, RenderContext context) {
-        Sprite target = null;
+        BlockState materialState = null;
         if (stack != null && stack.hasNbt() && stack.getSubNbt("BlockEntityTag") != null) {
             String idText = stack.getSubNbt("BlockEntityTag").getString("MaterialBlock");
             try {
                 Identifier id = new Identifier(idText);
-                if (Registries.BLOCK.containsId(id)) target = MinecraftClient.getInstance().getBlockRenderManager()
-                    .getModel(Registries.BLOCK.get(id).getDefaultState()).getParticleSprite();
+                if (Registries.BLOCK.containsId(id)) materialState = Registries.BLOCK.get(id).getDefaultState();
             } catch (RuntimeException ignored) { }
         }
-        emitWithSprite(target, random, context, () -> ((net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) wrapped)
-            .emitItemQuads(stack, random, context));
+        BakedModel materialModel = materialState == null ? null
+            : MinecraftClient.getInstance().getBlockRenderManager().getModel(materialState);
+        emitWithMaterialModel(materialState, materialModel, random, context,
+            () -> ((net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel) wrapped)
+                .emitItemQuads(stack, random, context));
     }
 
-    private void emitWithSprite(Sprite target, Supplier<Random> random, RenderContext context, Runnable emit) {
-        if (target == null) { emit.run(); return; }
-        context.pushTransform(quad -> remap(quad, target));
+    private void emitWithMaterialModel(BlockState materialState, BakedModel materialModel,
+            Supplier<Random> random, RenderContext context, Runnable emit) {
+        if (materialState == null || materialModel == null) { emit.run(); return; }
+        Sprite fallback = materialModel.getParticleSprite();
+        context.pushTransform(quad -> {
+            Direction face = quad.lightFace();
+            Sprite target = fallback;
+            if (face != null) {
+                java.util.List<net.minecraft.client.render.model.BakedQuad> faceQuads =
+                    materialModel.getQuads(materialState, face, random.get());
+                if (!faceQuads.isEmpty() && faceQuads.get(0).getSprite() != null)
+                    target = faceQuads.get(0).getSprite();
+            }
+            return remap(quad, target);
+        });
         try { emit.run(); } finally { context.popTransform(); }
     }
 
