@@ -24,7 +24,13 @@ public final class MaterialShapeBlockEntity extends BlockEntity {
         materialBlock = value;
         markDirty();
         if (world != null) {
+            // Notify both the renderer and the client block-entity cache. Without the
+            // explicit chunk update, the right material can appear only after a neighbour
+            // change happens to rebuild the chunk's render section.
             world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+            if (world instanceof net.minecraft.server.world.ServerWorld serverWorld) {
+                serverWorld.getChunkManager().markForUpdate(pos);
+            }
         }
     }
 
