@@ -37,6 +37,9 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
         context.drawText(textRenderer, Text.literal("‹"), x + 14, y + 8, 0xFFFFFFFF, false);
         context.drawText(textRenderer, Text.literal("›"), x + backgroundWidth - 21, y + 8, 0xFFFFFFFF, false);
 
+        // Draw the lower slot/inventory panel before the icon grid. Drawing it
+        // afterwards used to paint over the last row of shape icons.
+        context.fill(x + 7, y + 108, x + backgroundWidth - 7, y + backgroundHeight - 7, 0xFF8C7964);
         int count = ArchitectureCraftFabric.getSawbenchShapeCount();
         for (int cell = 0; cell < PAGE_SIZE; cell++) {
             int index = page * PAGE_SIZE + cell;
@@ -51,7 +54,6 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
         }
         context.drawText(textRenderer, Text.literal("Page " + (page + 1) + "/" + (Math.max(1, (count + PAGE_SIZE - 1) / PAGE_SIZE))),
             x + 61, y + 11, 0xFFFFFFFF, false);
-        context.fill(x + 7, y + 88, x + backgroundWidth - 7, y + backgroundHeight - 7, 0xFF8C7964);
     }
 
     @Override protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
