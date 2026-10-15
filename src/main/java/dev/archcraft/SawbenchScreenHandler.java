@@ -6,12 +6,15 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ArrayPropertyDelegate;
+import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.slot.Slot;
 
 public final class SawbenchScreenHandler extends ScreenHandler {
     private final Inventory inventory;
     private final ScreenHandlerContext context;
+    private final PropertyDelegate selectedModeProperty = new ArrayPropertyDelegate(1);
     private int selectedMode;
 
     public SawbenchScreenHandler(int syncId, PlayerInventory playerInventory) {
@@ -24,6 +27,8 @@ public final class SawbenchScreenHandler extends ScreenHandler {
         this.inventory = inventory;
         this.context = context;
         if (inventory instanceof SawbenchBlockEntity bench) selectedMode = bench.getSelectedMode();
+        selectedModeProperty.set(0, selectedMode);
+        addProperties(selectedModeProperty);
         inventory.onOpen(playerInventory.player);
 
         addSlot(new Slot(inventory, 0, 44, 35) {
@@ -40,12 +45,17 @@ public final class SawbenchScreenHandler extends ScreenHandler {
             addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
     }
 
-    public int getSelectedMode() { return selectedMode; }
-    public void setClientSelectedMode(int mode) { selectedMode = mode; }
+    public int getSelectedMode() { return selectedModeProperty.get(0); }
+    public void setClientSelectedMode(int mode) {
+        if (mode < 0 || mode >= ArchitectureCraftFabric.getSawbenchShapeCount()) return;
+        selectedMode = mode;
+        selectedModeProperty.set(0, mode);
+    }
 
     @Override public boolean onButtonClick(PlayerEntity player, int id) {
         if (id < 0 || id >= ArchitectureCraftFabric.getSawbenchShapeCount()) return false;
         selectedMode = id;
+        selectedModeProperty.set(0, id);
         context.run((world, pos) -> {
             if (world.getBlockEntity(pos) instanceof SawbenchBlockEntity bench) bench.setSelectedMode(id);
         });
