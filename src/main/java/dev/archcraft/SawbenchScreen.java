@@ -30,16 +30,17 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
     @Override protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
-        context.fill(x, y, x + backgroundWidth, y + backgroundHeight, 0xFFC6B39A);
-        context.fill(x + 4, y + 4, x + backgroundWidth - 4, y + 108, 0xFF6D5B49);
-        context.fill(x + 7, y + 7, x + 28, y + 24, 0xFF302A24);
+        context.fill(x, y, x + backgroundWidth, y + backgroundHeight, 0xFF373737);
+        context.fill(x + 1, y + 1, x + backgroundWidth - 1, y + backgroundHeight - 1, 0xFFC6C6C6);
+        context.fill(x + 4, y + 4, x + backgroundWidth - 4, y + 108, 0xFF8B8B8B);
+        context.fill(x + 7, y + 7, x + 28, y + 24, 0xFF373737);
         context.fill(x + backgroundWidth - 28, y + 7, x + backgroundWidth - 7, y + 24, 0xFF302A24);
         context.drawText(textRenderer, Text.literal("‹"), x + 14, y + 8, 0xFFFFFFFF, false);
         context.drawText(textRenderer, Text.literal("›"), x + backgroundWidth - 21, y + 8, 0xFFFFFFFF, false);
 
         // Draw the lower slot/inventory panel before the icon grid. Drawing it
         // afterwards used to paint over the last row of shape icons.
-        context.fill(x + 7, y + 108, x + backgroundWidth - 7, y + backgroundHeight - 7, 0xFF8C7964);
+        context.fill(x + 7, y + 108, x + backgroundWidth - 7, y + backgroundHeight - 7, 0xFFC6C6C6);
         int count = ArchitectureCraftFabric.getSawbenchShapeCount();
         for (int cell = 0; cell < PAGE_SIZE; cell++) {
             int index = page * PAGE_SIZE + cell;
@@ -57,10 +58,10 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
     }
 
     @Override protected void drawForeground(DrawContext context, int mouseX, int mouseY) {
-        context.drawText(textRenderer, title, 8, -10, 0x40352A, false);
-        context.drawText(textRenderer, playerInventoryTitle, 8, playerInventoryTitleY, 0xFFFFFF, false);
+        context.drawText(textRenderer, title, 8, -10, 0xFF404040, false);
+        context.drawText(textRenderer, playerInventoryTitle, 8, playerInventoryTitleY, 0xFF404040, false);
         String shape = ArchitectureCraftFabric.getSawbenchShapeName(handler.getSelectedMode());
-        context.drawText(textRenderer, Text.literal("Selected: " + shape), 8, 103, 0xFFFFFF, false);
+        context.drawText(textRenderer, Text.literal("Selected: " + shape), 8, 103, 0xFF404040, false);
     }
 
     @Override public boolean mouseClicked(double mouseX, double mouseY, int button) {
