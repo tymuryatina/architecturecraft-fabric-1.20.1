@@ -21,6 +21,8 @@ jobs:
           gradle-version: '8.6'
       - name: Validate mod resources
         run: python3 scripts/validate_resources.py
+      - name: Validate sawbench integration wiring
+        run: python3 scripts/validate_sawbench_integration.py
       - name: Build
         run: gradle build --no-daemon
       - uses: actions/upload-artifact@v4
