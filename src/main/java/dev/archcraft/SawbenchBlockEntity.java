@@ -43,9 +43,10 @@ public final class SawbenchBlockEntity extends BlockEntity implements NamedScree
             if (state.getBlock() == ArchitectureCraftFabric.SAWBENCH_BLOCK)
                 world.setBlockState(pos, state.with(ArchitectureCraftFabric.SawbenchBlock.MODE, mode % 4), 3);
         }
-        // Changing the selected shape must not consume input or produce items.
-        // Crafting happens when input is inserted or output space becomes available.
+        // If input remains and the output slot is empty, produce the newly selected shape.
+        // craft() itself is server-only and will leave an existing output untouched.
         markDirty();
+        craft();
     }
 
     @Override public int size() { return inventory.size(); }
