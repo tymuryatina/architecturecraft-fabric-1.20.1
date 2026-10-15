@@ -31,7 +31,7 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
         int x = (width - backgroundWidth) / 2;
         int y = (height - backgroundHeight) / 2;
         context.fill(x, y, x + backgroundWidth, y + backgroundHeight, 0xFFC6B39A);
-        context.fill(x + 4, y + 4, x + backgroundWidth - 4, y + 83, 0xFF6D5B49);
+        context.fill(x + 4, y + 4, x + backgroundWidth - 4, y + 108, 0xFF6D5B49);
         context.fill(x + 7, y + 7, x + 28, y + 24, 0xFF302A24);
         context.fill(x + backgroundWidth - 28, y + 7, x + backgroundWidth - 7, y + 24, 0xFF302A24);
         context.drawText(textRenderer, Text.literal("‹"), x + 14, y + 8, 0xFFFFFFFF, false);
@@ -44,7 +44,7 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
             int col = cell % COLUMNS;
             int row = cell / COLUMNS;
             int sx = x + 9 + col * 26;
-            int sy = y + 29 + row * 13;
+            int sy = y + 29 + row * 18;
             boolean selected = index == handler.getSelectedMode();
             context.fill(sx - 1, sy - 1, sx + 17, sy + 17, selected ? 0xFFFFD36B : 0xFF302A24);
             context.drawItem(new ItemStack(ArchitectureCraftFabric.getSawbenchShapeBlock(index)), sx, sy);
@@ -58,7 +58,7 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
         context.drawText(textRenderer, title, 8, -10, 0x40352A, false);
         context.drawText(textRenderer, playerInventoryTitle, 8, playerInventoryTitleY, 0xFFFFFF, false);
         String shape = ArchitectureCraftFabric.getSawbenchShapeName(handler.getSelectedMode());
-        context.drawText(textRenderer, Text.literal("Selected: " + shape), 8, 76, 0xFFFFFF, false);
+        context.drawText(textRenderer, Text.literal("Selected: " + shape), 8, 103, 0xFFFFFF, false);
     }
 
     @Override public boolean mouseClicked(double mouseX, double mouseY, int button) {
@@ -77,9 +77,9 @@ public final class SawbenchScreen extends HandledScreen<SawbenchScreenHandler> {
                 page = Math.min(pages - 1, page + 1);
                 return true;
             }
-            if (localY >= 27 && localY < 81 && localX >= 8 && localX < 166) {
+            if (localY >= 27 && localY < 102 && localX >= 8 && localX < 166) {
                 int col = (int) (localX - 9) / 26;
-                int row = (int) (localY - 29) / 13;
+                int row = (int) (localY - 29) / 18;
                 if (col >= 0 && col < COLUMNS && row >= 0 && row < ROWS) {
                     int index = page * PAGE_SIZE + row * COLUMNS + col;
                     if (index < count) {
