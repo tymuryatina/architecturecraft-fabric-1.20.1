@@ -88,6 +88,10 @@ public class ArchitectureCraftFabric implements ModInitializer {
         if (index < 0 || index >= shapes.size()) return null;
         return Registries.BLOCK.getId(shapes.get(index));
     }
+    public static Block getSawbenchShapeBlock(int index) {
+        List<Block> shapes = getUniqueSawbenchShapes();
+        return index < 0 || index >= shapes.size() ? null : shapes.get(index);
+    }
     public static String getSawbenchShapeName(int index) {
         Identifier id = getSawbenchShapeId(index);
         return id == null ? "Unknown" : canonicalShapeKey(id.getPath()).replace('_', ' ');
