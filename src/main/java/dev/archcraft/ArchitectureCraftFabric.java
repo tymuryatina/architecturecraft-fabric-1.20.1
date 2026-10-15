@@ -36,6 +36,8 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.block.BlockWithEntity;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.block.BlockWithEntity;
 import net.minecraft.screen.ScreenHandlerType;
@@ -53,15 +55,42 @@ public class ArchitectureCraftFabric implements ModInitializer {
     public static ScreenHandlerType<SawbenchScreenHandler> SAWBENCH_SCREEN_HANDLER;
     public static BlockEntityType<MaterialShapeBlockEntity> MATERIAL_SHAPE_BLOCK_ENTITY;
     private static final List<Block> MATERIAL_SHAPE_BLOCKS = new ArrayList<>();
-    /** All registered architectural shapes are selectable in the sawbench, regardless of material family. */
-    public static int getSawbenchShapeCount() { return MATERIAL_SHAPE_BLOCKS.size(); }
+    /** One entry per geometric shape; material-specific legacy blocks are not separate choices. */
+    private static List<Block> getUniqueSawbenchShapes() {
+        Map<String, Block> unique = new LinkedHashMap<>();
+        for (Block block : MATERIAL_SHAPE_BLOCKS) {
+            String path = Registries.BLOCK.getId(block).getPath();
+            String key = canonicalShapeKey(path);
+            Block previous = unique.get(key);
+            if (previous == null || materialPreference(path) < materialPreference(Registries.BLOCK.getId(previous).getPath()))
+                unique.put(key, block);
+        }
+        return new ArrayList<>(unique.values());
+    }
+    private static String canonicalShapeKey(String path) {
+        String[] materials = {"dark_oak", "spruce", "birch", "acacia", "jungle", "mangrove", "cherry", "crimson", "warped", "stone", "custom", "oak"};
+        for (String material : materials) {
+            String suffix = "_" + material;
+            if (path.endsWith(suffix)) return path.substring(0, path.length() - suffix.length());
+        }
+        return path;
+    }
+    private static int materialPreference(String path) {
+        if (!path.contains("_")) return 0;
+        if (path.endsWith("_custom")) return 1;
+        if (path.endsWith("_oak")) return 2;
+        if (path.endsWith("_stone")) return 3;
+        return 4;
+    }
+    public static int getSawbenchShapeCount() { return getUniqueSawbenchShapes().size(); }
     public static Identifier getSawbenchShapeId(int index) {
-        if (index < 0 || index >= MATERIAL_SHAPE_BLOCKS.size()) return null;
-        return Registries.BLOCK.getId(MATERIAL_SHAPE_BLOCKS.get(index));
+        List<Block> shapes = getUniqueSawbenchShapes();
+        if (index < 0 || index >= shapes.size()) return null;
+        return Registries.BLOCK.getId(shapes.get(index));
     }
     public static String getSawbenchShapeName(int index) {
         Identifier id = getSawbenchShapeId(index);
-        return id == null ? "Unknown" : id.getPath().replace('_', ' ');
+        return id == null ? "Unknown" : canonicalShapeKey(id.getPath()).replace('_', ' ');
     }
     private static Block register(String name, Block block) {
         Identifier id = new Identifier(MOD_ID, name);
