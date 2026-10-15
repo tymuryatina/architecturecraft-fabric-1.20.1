@@ -28,6 +28,7 @@ checks = {
     "material is persisted by the shape block entity": 'nbt.putString("MaterialBlock", materialBlock)' in shape_entity and 'nbt.getString("MaterialBlock")' in shape_entity,
     "shape selector controls are present": 'Text.literal("<")' in screen and 'Text.literal(">")' in screen,
     "selected shape is synced through handler properties": "addProperties(selectedModeProperty)" in handler and "selectedModeProperty.set(0, id)" in handler,
+    "changing shape resumes crafting when output is free": "markDirty();\n        craft();" in bench,
     "material texture model is registered": "new MaterialTextureBakedModel(model)" in client,
     "item and world rendering remap UVs": "emitItemQuads" in texture_model and "emitBlockQuads" in texture_model and "quad.sprite(vertex, 0" in texture_model,
 }
